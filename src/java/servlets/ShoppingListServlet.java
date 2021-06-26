@@ -25,7 +25,7 @@ public class ShoppingListServlet extends HttpServlet {
             throws ServletException, IOException {
         // get session
         HttpSession session = request.getSession();
-        
+
         String action = request.getParameter("action");
 
         if (action != null) {
@@ -50,13 +50,14 @@ public class ShoppingListServlet extends HttpServlet {
             throws ServletException, IOException {
         // get session
         HttpSession session = request.getSession();
-        
+
         String username = request.getParameter("username");
         String action = request.getParameter("action");
         String item = request.getParameter("item");
-        
+        String listItem = request.getParameter("listitem");
+
         ArrayList<String> list = (ArrayList<String>) session.getAttribute("list");
-        
+
         if (action != null) {
             if (action.equals("register")) {
                 if (username != null && !username.equals("")) {
@@ -64,16 +65,16 @@ public class ShoppingListServlet extends HttpServlet {
                     response.sendRedirect("ShoppingList");
                     return;
                 } else {
-                     request.setAttribute("message", "Please enter a valid username.");
-                     getServletContext().getRequestDispatcher("/WEB-INF/register.jsp").forward(request, response);
-                     return;
+                    request.setAttribute("message", "Please enter a valid username.");
+                    getServletContext().getRequestDispatcher("/WEB-INF/register.jsp").forward(request, response);
+                    return;
                 }
-            }
-            else if (action.equals("add") && !item.equals("")) {
+            } else if (action.equals("add") && !item.equals("")) {
                 if (list != null) {
                     list.add(item);
                     session.setAttribute("list", list);
                     response.sendRedirect("ShoppingList");
+                    return;
                 } else {
                     list = new ArrayList<>();
                     list.add(item);
@@ -81,18 +82,23 @@ public class ShoppingListServlet extends HttpServlet {
                     response.sendRedirect("ShoppingList");
                     return;
                 }
+            } else if (action.equals("delete") && !listItem.equals("") && listItem != null) {
+                for (int i = 0; i < list.size(); i++) {
+                    if (listItem.equals(list.get(i))) {
+                        list.remove(i);
+                    }
+                }
+                response.sendRedirect("ShoppingList");
+                return;
+            } else {
+                response.sendRedirect("ShoppingList");
+                return;
             }
+        } else {
+            response.sendRedirect("ShoppingList");
+            return;
         }
-        
-//        if (username != null && !username.equals("")) {
-//            session.setAttribute("username", username);
-//            getServletContext().getRequestDispatcher("/WEB-INF/shoppingList.jsp").forward(request, response);
-//        } else {
-//            request.setAttribute("message", "Please enter a valid username.");
-//            getServletContext().getRequestDispatcher("/WEB-INF/register.jsp").forward(request, response);
-//        }
-        
-        
+
     }
 
 }
