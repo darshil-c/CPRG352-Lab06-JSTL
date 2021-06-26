@@ -27,7 +27,18 @@
             <input type="hidden" name="action" value="add">
         </form>
         <form method="POST">
-            
+            <c:forEach var="list" items="${list}">
+                <table>
+                    <tr>
+                        <td>
+                            <input type="radio" name="listitem" value="${list}" id="${list}">
+                        </td>
+                        <td>
+                            <label for="${list}">${list}</label>
+                        </td>
+                    </tr>
+                </table>
+            </c:forEach>
         </form>
         
     </body>
